@@ -10,9 +10,7 @@ import pickle
 from pathlib import Path
 from typing import Optional
 
-import numpy as np
-
-from backend.app.core.config import ML_MODELS_DIR
+from typing import Optional
 from backend.app.services.feature_extractor import ML_FEATURE_NAMES
 
 logger = logging.getLogger(__name__)
@@ -63,25 +61,31 @@ def predict_phishing_probability(feature_vector: list[float]) -> tuple[float, st
     Returns:
         (probability, model_used) tuple
     """
+    # Load models
     _load_models()
 
-    features = np.array(feature_vector).reshape(1, -1)
-
-    # Try XGBoost first
-    if _xgb_model is not None:
+    if _xgb_model is not None or _lr_model is not None:
         try:
-            prob = _xgb_model.predict_proba(features)[0][1]
-            return float(prob), "xgboost"
-        except Exception as e:
-            logger.error("XGBoost prediction failed: %s", e)
+            import numpy as np
+            features = np.array(feature_vector).reshape(1, -1)
 
-    # Fallback to Logistic Regression
-    if _lr_model is not None:
-        try:
-            prob = _lr_model.predict_proba(features)[0][1]
-            return float(prob), "logistic_regression"
-        except Exception as e:
-            logger.error("LogReg prediction failed: %s", e)
+            # Try XGBoost first
+            if _xgb_model is not None:
+                try:
+                    prob = _xgb_model.predict_proba(features)[0][1]
+                    return float(prob), "xgboost"
+                except Exception as e:
+                    logger.error("XGBoost prediction failed: %s", e)
+
+            # Fallback to Logistic Regression
+            if _lr_model is not None:
+                try:
+                    prob = _lr_model.predict_proba(features)[0][1]
+                    return float(prob), "logistic_regression"
+                except Exception as e:
+                    logger.error("LogReg prediction failed: %s", e)
+        except ImportError:
+            logger.warning("ML libraries missing. Falling back to heuristic scorer.")
 
     # Heuristic fallback
     return _heuristic_score(feature_vector), "heuristic"
