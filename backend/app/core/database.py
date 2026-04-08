@@ -6,9 +6,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+import os
 from backend.app.core.config import BASE_DIR
 
-DB_PATH = BASE_DIR / "shieldyono.db"
+if os.getenv("VERCEL") == "1":
+    DB_PATH = Path("/tmp/shieldyono.db")
+else:
+    DB_PATH = BASE_DIR / "shieldyono.db"
 _local = threading.local()
 
 
