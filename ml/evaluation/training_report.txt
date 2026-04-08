@@ -1,0 +1,26 @@
+ShieldYONO Model Training Report
+==================================================
+
+Total samples: 3513
+Train: 2107 | Val: 703 | Test: 703
+
+XGBoost Test Results:
+              precision    recall  f1-score   support
+
+       Legit       1.00      1.00      1.00       244
+    Phishing       1.00      1.00      1.00       459
+
+    accuracy                           1.00       703
+   macro avg       1.00      1.00      1.00       703
+weighted avg       1.00      1.00      1.00       703
+
+
+Logistic Regression Test Results:
+              precision    recall  f1-score   support
+
+       Legit       0.98      1.00      0.99       244
+    Phishing       1.00      0.99      1.00       459
+
+    accuracy                           0.99       703
+   macro avg       0.99      1.00      0.99       703
+weighted avg       0.99      0.99      0.99       703
