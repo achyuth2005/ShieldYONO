@@ -12,22 +12,22 @@
       "use": "@vercel/python"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/backend/app/main.py"
+      "src": "/api/(.*)",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/docs(.*)",
-      "destination": "/backend/app/main.py"
+      "src": "/docs(.*)",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/openapi.json",
-      "destination": "/backend/app/main.py"
+      "src": "/openapi.json",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "/frontend/dist/$1"
     }
   ]
 }
